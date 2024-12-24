@@ -1,0 +1,32 @@
+# Declare constants #
+cst bigint PI = 3!
+
+# Declare variables#
+bigint radius = 5!
+bigfloat area!
+
+# Function to calculate the area of a circle#
+fn bigfloat calculateArea(bigint r) {
+    bigfloat result = PI * r * r!
+    giveback result!
+}
+
+# Function to display a message #
+fn displayMessage(str message) {
+    write("Message:", message)!
+}
+
+# Main function #
+main() {
+    write("Welcome to Flamingo!")!
+
+    # Calculate the area of a circle #
+    area = calculateArea(radius)!
+    write("The area of the circle is:", area)!
+
+    # Print a greeting #
+    str greeting = "Hello, World!"!
+    displayMessage(greeting)!
+}
+
+
