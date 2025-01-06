@@ -3,14 +3,14 @@
 #include "Flamingo.tab.h"
 
 extern void termeSuiv(char *s);
-extern void erreur(const char *s);
-extern void affichErrLex();
+extern void yyerror(const char *s);
+extern void showLexicalError();
 extern int termeCourant;
 
 %}
 
 %option noyywrap 
-
+%option yylineno
 /* partie decalaration FLEX  */
 ID          [a-zA-Z_][a-zA-Z0-9_]* 
 nb_int       [0-9]+
@@ -18,7 +18,6 @@ nb_float     {nb_int}+"."+{nb_int}
 c_string     \".*\"
 bol        TRUE|FALSE
 TYPE       (nb_int|nb_float|c_string|bol)
-typeVAR            (INTTYPE|BIGINTTYPE|LONGINTTYPE|STRINGTYPE|FLOATTYPE|BIGFLOATTYPE|LONGFLOATTYPE|BOOLTYPE)
 LINEBREAK           "\n"|"\r"
 COMMENTAIRE         "#"([^#]|\n)*"#"
 PACK        pack
@@ -43,13 +42,15 @@ TO          to
 GIVEBACK    giveback
 READ        read
 WRITE       write
+MAIN        Main
+HelloMain Hello_Flamingo_Developer
 PARENTHESEOUVRANTE   \(
 PARENTHESEFERMANTE   \)
 ACCOLADEOUVRANTE     \{
 ACCOLADEFERMANTE     \}
 CROCHETOUVRANT       \[
 CROCHETFERMANT       \]
-EXCLAM               !
+ENDINST               ;;
 POINT                \.
 VIRG                 ,
 INC                  \+\+
@@ -63,7 +64,6 @@ DIVINTEQUALS         \/\/=
 DIVEQUALS            \/=
 MODEQUALS            %=
 POWEQUALS            \^=
-EQUALS               =
 ADD                  \+
 SUB                  \-
 MUL                  \*
@@ -85,6 +85,14 @@ OR                   \|\|
 {PACK} {
     termeSuiv("PACK");
     return PACK;
+}
+{MAIN} {
+    termeSuiv("MAIN");
+    return MAIN;
+}
+{HelloMain} {
+    termeSuiv("HelloMain");
+    return HelloMain;
 }
 {FONCTION} {
     termeSuiv("FONCTION");
@@ -130,14 +138,11 @@ OR                   \|\|
     termeSuiv("TYPE");
     return TYPE;
 }
-{typeVAR} {
-    termeSuiv("	typeVAR");
-    return typeVAR;
-}
 {STRUCT} {
     termeSuiv("STRUCT");
     return STRUCT;
 }
+
 {IF} {
     termeSuiv("IF");
     return IF;
@@ -195,8 +200,6 @@ OR                   \|\|
     return STRING;
 }
 
-
-
 {PARENTHESEOUVRANTE} {
     termeSuiv("(");
     return PARENTHESEOUVRANTE;
@@ -221,9 +224,9 @@ OR                   \|\|
     termeSuiv("]");
     return CROCHETFERMANT;
 }
-{EXCLAM} {
-    termeSuiv(";");
-    return EXCLAM;
+{ENDINST} {
+    termeSuiv(";;");
+    return ENDINST ;
 }
 {POINT} {
     termeSuiv(".");
@@ -276,10 +279,6 @@ OR                   \|\|
 {POWEQUALS} {
     termeSuiv("^=");
     return POWEQUALS;
-}
-{EQUALS} {
-    termeSuiv("=");
-    return EQUALS;
 }
 {ADD} {
     termeSuiv("+");
@@ -361,14 +360,11 @@ OR                   \|\|
 <<EOF>> yyterminate();
 
 . {
-    erreur("Unexpected token");
-    affichErrLex();
+    yyerror("Unexpected token");
+    showLexicalError();
     yyterminate();
     }
 
 %%
 
-int main() {
-    yylex();
-    return 0;
-}
+

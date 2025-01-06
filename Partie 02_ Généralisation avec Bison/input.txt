@@ -1,0 +1,21 @@
+pack "simple_test";;
+fn int add(int a, int b) {
+    int c;; 
+    c = a + b;;
+    giveback c }
+    
+fn float power(float base, int exponent) {
+    float result = 1.0 ;;
+    while (exponent > 0) repeat { result = result * base;;
+        exponent = exponent - 1;; };;
+    giveback result }
+Main(Hello_Flamingo_Developer){
+    int x;;
+    x=5;;   
+    int y ;;
+    y = 10;;
+    int result ;;
+    result = add(x, y);;
+    write( result);;
+}
+

@@ -13,8 +13,9 @@
 
 %token PACK
 %token FONCTION
+%token MAIN 
+%token HelloMain
 %token CONST
-%token typeVAR
 %token TYPE
 %token INTTYPE
 %token BIGINTTYPE
@@ -47,7 +48,7 @@
 %token ACCOLADEFERMANTE
 %token CROCHETOUVRANT
 %token CROCHETFERMANT
-%token EXCLAM
+%token ENDINST 
 %token POINT
 %token VIRG
 %token INC
@@ -61,7 +62,6 @@
 %token DIVEQUALS
 %token MODEQUALS
 %token POWEQUALS
-%token EQUALS
 %token ADD
 %token SUB
 %token MUL
@@ -91,7 +91,7 @@
 %left POW               /* Opérateur d'exponentiation : ^ */
 %right NEG              /* Négation unaire : ! */
 %left INC DEC           /* Incrément et décrément : ++, -- */
-%nonassoc EQUALS LESS GREATER LESSEQUALS GREATEREQUALS /* Opérateurs relationnels et d'égalité */
+%nonassoc DOUBLEEQUALS LESS GREATER LESSEQUALS GREATEREQUALS /* Opérateurs relationnels et d'égalité */
 %nonassoc NOTEQUALS ADDEQUALS SUBEQUALS MULEQUALS DIVEQUALS MODEQUALS /* Opérateurs d'affectation */
 %left PARENTHESEOUVRANTE PARENTHESEFERMANTE /* Parenthèses */
 
@@ -102,34 +102,40 @@ extern int yylineno;
 extern int yyleng;
 extern int yylex();
 
-char* file = "fl.txt";
+char* file = "input.txt";
+/*char* file = "test2.txt";*/
 
-int currentColumn = 1;
+int termeCourant = 1;
 
 void termeSuiv(char *s);
-void erreur(const char *s);
-void affichErrLex();
+extern void yyerror(const char *s);
+extern void showLexicalError();
 %}
 %%
-ProgrammeFlamingo: %empty
-    |Importationlib FuncsDeclar CorMain 
+typeVAR: INTTYPE|BIGINTTYPE|LONGINTTYPE|STRINGTYPE|FLOATTYPE|BIGFLOATTYPE|LONGFLOATTYPE|BOOLTYPE;
+ProgrammeFlamingo:
+    Importationlib FuncsDeclar CorMain 
     ;
-Importationlib: %empty
-    |PACK STRING EXCLAM Importationlib
+Importationlib: PACK STRING ENDINST Importationlib
+    | %empty
     ;
-FuncsDeclar: %empty
-    |FuncDeclar FuncsDeclar
+FuncsDeclar: 
+    FuncDeclar FuncsDeclar
+     | FuncDeclar
     ;
-FuncDeclar:
-    |FONCTION typeVAR ID PARENTHESEOUVRANTE Parametres PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc GIVEBACK ID ACCOLADEFERMANTE /* pour les fonctions*/
+    
+FuncDeclar:FONCTION typeVAR ID PARENTHESEOUVRANTE Parametres PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc GIVEBACK ID ACCOLADEFERMANTE /* pour les fonctions*/
     |FONCTION ID PARENTHESEOUVRANTE Parametres PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc  ACCOLADEFERMANTE /* pour les procédures*/
+    |FONCTION typeVAR ID PARENTHESEOUVRANTE  PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc GIVEBACK ID ACCOLADEFERMANTE /* pour les fonctions*/
+    |FONCTION ID PARENTHESEOUVRANTE  PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc  ACCOLADEFERMANTE /* pour les procédures*/
+   | %empty  /* Ajouter en dernier pour eviter une reduction prématurée et laisser la priorité aux déclarations complétes*/
     ;
-CorFunc: %empty
-    |aumoinsInst 
+CorFunc: 
+    aumoinsInst 
     ;
-aumoinsInst: %empty
-    |Inst EXCLAM
-    |Inst EXCLAM aumoinsInst
+aumoinsInst:
+    Inst ENDINST 
+    |Inst ENDINST aumoinsInst
     ;
 Inst: Declar 
     |Affec 
@@ -140,32 +146,34 @@ Inst: Declar
     |WriteMethod
     |CallMethod
     ;
-CorMain: aumoinsInst /*elimination du cas empty*/
+CorMain: MAIN PARENTHESEOUVRANTE HelloMain PARENTHESEFERMANTE ACCOLADEOUVRANTE aumoinsInst ACCOLADEFERMANTE  /*elimination du cas empty*/
     ;
-Parametres: %empty
-    |Parametre VIRG Parametres
-    ;
+Parametres: 
+    Parametre VIRG Parametres
+    |Parametre ;
+    
 Parametre: typeVAR ID
     ;
-Declar: %empty
-    |STRUCT ID AFFECT ACCOLADEOUVRANTE Parametres ACCOLADEFERMANTE 
-    |CONST typeVAR ID Affec TYPE
+Declar: 
+    STRUCT ID AFFECT ACCOLADEOUVRANTE Parametres ACCOLADEFERMANTE 
+    |STRUCT ID AFFECT ACCOLADEOUVRANTE  ACCOLADEFERMANTE 
+    |CONST typeVAR Affec
     |typeVAR Affec
     |typeVAR ID
-    |typeVAR ID CROCHETOUVRANT CROCHETFERMANT
     |typeVAR ID CROCHETOUVRANT INT CROCHETFERMANT
-    |typeVAR ID CROCHETOUVRANT CROCHETFERMANT CROCHETOUVRANT CROCHETFERMANT
+    |typeVAR ID CROCHETOUVRANT CROCHETFERMANT
     |typeVAR ID CROCHETOUVRANT INT CROCHETFERMANT CROCHETOUVRANT INT CROCHETFERMANT
+    |typeVAR ID CROCHETOUVRANT CROCHETFERMANT CROCHETOUVRANT CROCHETFERMANT
+|%empty  /* Ajouter en dernier pour eviter une reduction prématurée et laisser la priorité aux déclarations complétes*/
     ;
-Affec: %empty
-    |ID AFFECT TYPE
-    |StructChamp AFFECT TYPE /*Affectation des champs d'une structure */
-    |ID AFFECT CallMethod
-    |ID CROCHETOUVRANT ID CROCHETFERMANT AFFECT ID
-    |ID CROCHETOUVRANT ID CROCHETFERMANT AFFECT TYPE
-    |ID CROCHETOUVRANT ID CROCHETFERMANT AFFECT ID CROCHETOUVRANT ID CROCHETFERMANT
-    |ID AFFECT ID CROCHETOUVRANT ID CROCHETFERMANT  
-    |ID AFFECT ID
+
+    
+AffecType: 
+ID|StructChamp|ID CROCHETOUVRANT ID CROCHETFERMANT|CallMethod|expression|TYPE;
+Affec:
+    ID AFFECT AffecType
+    |StructChamp AFFECT AffecType /*des champs d'une structure */
+    |ID CROCHETOUVRANT ID CROCHETFERMANT AFFECT AffecType
     ;
 StructChamp: ID POINT ID
     ;
@@ -176,18 +184,33 @@ Alternate: %empty
     ;
 CorWhile: WHILE Condition REPEAT ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE;
 
-CorFor: FOR PARENTHESEOUVRANTE ID FROM INT TO INT PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE
-ReadMethod: READ PARENTHESEOUVRANTE ID PARENTHESEFERMANTE
+CorFor: FOR PARENTHESEOUVRANTE ID FROM INT TO INT PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE 
+|FOR PARENTHESEOUVRANTE ID FROM INT TO ID PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE
+|FOR PARENTHESEOUVRANTE ID FROM ID TO INT PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE
+|FOR PARENTHESEOUVRANTE ID FROM ID TO ID PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE;
+ReadMethod: READ PARENTHESEOUVRANTE ID PARENTHESEFERMANTE;
 WriteMethod: WRITE PARENTHESEOUVRANTE ParamsWithoutVARTYPE PARENTHESEFERMANTE
-ParamsWithoutVARTYPE: %empty
-    |StructChamp
+|WRITE PARENTHESEOUVRANTE ParamsWrite PARENTHESEFERMANTE;
+
+ParamsWrite: 
+ParamsWithoutVARTYPE
+ |STRING  
+ |STRING VIRG ParamsWrite
+ |ParamsWrite VIRG ParamsWrite ;
+
+    
+ParamsWithoutVARTYPE: 
+    StructChamp
     | ID CROCHETOUVRANT ID CROCHETFERMANT 
     | ID
     | TYPE
-    | ID ParamsWithoutVARTYPE
-    |TYPE ParamsWithoutVARTYPE
+    | ID VIRG ParamsWithoutVARTYPE 
+    |TYPE VIRG ParamsWithoutVARTYPE
+    | StructChamp VIRG ParamsWithoutVARTYPE 
+    | ID CROCHETOUVRANT ID CROCHETFERMANT VIRG ParamsWithoutVARTYPE 
     ;
-CallMethod: ID PARENTHESEOUVRANTE ParamsWithoutVARTYPE PARENTHESEFERMANTE 
+CallMethod: ID PARENTHESEOUVRANTE ParamsWithoutVARTYPE PARENTHESEFERMANTE
+|ID PARENTHESEOUVRANTE PARENTHESEFERMANTE ;
 
 Condition:   
             PARENTHESEOUVRANTE comparaison PARENTHESEFERMANTE  
@@ -228,8 +251,10 @@ terme:
             | SUB INT     
             | ADD FLOAT   
             | SUB FLOAT   
-            | INC ID      /* incrémentation */
-            | DEC ID      /* décrémentation */
+            | INC ID      /*  Pre-incrémentation */
+            | DEC ID      /* Pre-décrémentation */
+            | ID INC      /* post-incrémentation */
+            | ID DEC       /* post-décrémentation */
             ;
 
 
@@ -238,32 +263,32 @@ terme:
 
 
 %%
-int termeCourant;
 void termeSuiv(char *s){
     // fprintf(stdout, "%d: %s\n", yylineno, s);
     termeCourant+=yyleng;
 }
 
-void erreur(const char *s) {
+void yyerror(const char *s) {
   fprintf(stdout, "File '%s', line %d, character %d :  %s \n", file, yylineno, termeCourant, s);
 }
 
 int main (void)
 {
     // yydebug = 1;
+  
     yyin=fopen(file, "r");
     if(yyin==NULL){
         printf("erreur dans l'ouverture du fichier");
         return 1;
     }
-    yyparse(yymsgp);  
+    yyparse();  
 
 // printf("succ\n");
 
     return 0;
 }
 
-void affichErrLex() {
+void showLexicalError() {
 
     char line[256], introError[80];
 
