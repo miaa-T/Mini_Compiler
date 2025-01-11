@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
+#define MAX 128
 #include "pile.h"
 
 void initPile(pile *P){
