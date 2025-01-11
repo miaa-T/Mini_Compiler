@@ -14,13 +14,13 @@ typedef enum {
     INT64,
     INT256,
     CHAR,
-    STRING,
+    STRINGG,
     FLOAT32,
     FLOAT64,
     FLOAT256,
-    CONST,
+    CONSTT,
     TABLE,
-    BOOL,
+    BOOLL,
     TABLE2D,
     NULLL,
 } Type;
@@ -110,5 +110,10 @@ void afficherTableSymbole(SymboleTable *table);
 const char* typeToStr(Type type);
 NodeAttribut *searchAttributByName(NodeSymbole *symbole, char *name);
 /*****************************************************************************************/
-
+void updateAttributValue(NodeSymbole *symbole, char *name, void *value);
+void *getAttributValue(NodeSymbole *symbole, char *name);
+Param *searchParamByName(NodeSymbole *symbole, char *name);
+Type getTypeOfParamByIndex(NodeSymbole *symbole, int index);
+int countParams(NodeSymbole *symbole);
+Type getTypeByID(SymboleTable *symboleTable, char *tokenId);
 #endif

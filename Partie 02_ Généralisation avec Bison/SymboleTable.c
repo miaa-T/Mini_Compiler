@@ -10,11 +10,11 @@ const char* typeToStr(Type type) {
         case INT64: return "int64";
         case INT256: return "int256";
         case CHAR: return "char";
-        case STRING: return "string";
+        case STRINGG: return "string";
         case FLOAT32: return "float32";
         case FLOAT64: return "float64";
         case FLOAT256: return "float256";
-        case CONST: return "const";
+        case CONSTT: return "const";
         case TABLE: return "table";
         case TABLE2D: return "table2d";
         case NULLL: return "NULL";
@@ -43,10 +43,10 @@ void afficherAttributs(NodeSymbole *symbole) {
             case FLOAT32:
                 printf("%f\n", currentAttribut->value.floatValue);
                 break;
-            case STRING:
+            case STRINGG:
                 printf("%s\n", currentAttribut->value.stringValue);
                 break;
-            case BOOL:
+            case BOOLL:
                 printf("%s\n", currentAttribut->value.boolValue ? "true" : "false");
                 break;
             default:
@@ -175,10 +175,10 @@ void setAttribut(NodeSymbole *symbole, char *name, Type type, void *value) {
         case FLOAT32:
             newAttr->value.floatValue = *(float *)value;
             break;
-        case STRING:
+        case STRINGG:
             newAttr->value.stringValue = strdup((char *)value);
             break;
-        case BOOL:
+        case BOOLL:
             newAttr->value.boolValue = *(bool *)value;
             break;
         default:
@@ -237,11 +237,11 @@ void updateAttributValue(NodeSymbole *symbole, char *name, void *value) {
         case FLOAT32:
             attr->value.floatValue = *(float *)value;
             break;
-        case STRING:
+        case STRINGG:
             free(attr->value.stringValue); // Libérer l'ancienne valeur
             attr->value.stringValue = strdup((char *)value);
             break;
-        case BOOL:
+        case BOOLL:
             attr->value.boolValue = *(bool *)value;
             break;
         default:
@@ -263,9 +263,9 @@ void *getAttributValue(NodeSymbole *symbole, char *name) {
             return &attr->value.intValue;
         case FLOAT32:
             return &attr->value.floatValue;
-        case STRING:
+        case STRINGG:
             return attr->value.stringValue;
-        case BOOL:
+        case BOOLL:
             return &attr->value.boolValue;
         default:
             return NULL;
@@ -440,30 +440,7 @@ Type getTypeOfParamByIndex(NodeSymbole *symbole, int index) {
     return current->type;
 }
 
-int main() {
-    SymboleTable *table = allocateSymboleTable();
 
-    // Ajouter un symbole simple
-    NodeSymbole *var = insertSymbole(table, "x", Attsimple, INT32);
-    int value = 42;
-    setAttribut(var, "x", INT32, &value);
-
-    // Ajouter une fonction avec des paramètres
-    NodeSymbole *func = insertSymbole(table, "func", Fonction, INT32);
-    addParam(func, "param1", INT32);
-
-    // Afficher la table des symboles
-    afficherTableSymbole(table);
-
-    // Mettre à jour et récupérer une valeur
-    int newValue = 100;
-    updateAttributValue(var, "x", &newValue);
-    int *retrievedValue = (int *)getAttributValue(var, "x");
-    printf("Valeur récupérée: %d\n", *retrievedValue);
-
-    DeleteTable(&table);
-    return 0;
-}
 
 int countParams(NodeSymbole *symbole) {
     int count = 0;
@@ -482,3 +459,6 @@ Type getTypeByID(SymboleTable *symboleTable, char *tokenId) {
     }
     return NULLL; // Retourne NULLL si le symbole n'est pas trouvé
 }
+
+
+

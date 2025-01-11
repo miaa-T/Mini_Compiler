@@ -1,5 +1,5 @@
 
-#line 3 "lex.yy.c"
+#line 2 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -599,19 +599,19 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "Flamingo.l"
-#line 2 "Flamingo.l"
+#line 1 "lex.l"
+#line 2 "lex.l"
 #include <stdio.h>
-#include "Flamingo.tab.h"
+#include "yacc.tab.h"
 
 extern void termeSuiv(char *s);
 extern void yyerror(const char *s);
 extern void showLexicalError();
 extern int termeCourant;
 
-#line 613 "lex.yy.c"
+#line 612 "lex.yy.c"
 /* partie decalaration FLEX  */
-#line 615 "lex.yy.c"
+#line 614 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -828,10 +828,10 @@ YY_DECL
 		}
 
 	{
-#line 83 "Flamingo.l"
+#line 83 "lex.l"
 
 
-#line 835 "lex.yy.c"
+#line 834 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -900,7 +900,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 85 "Flamingo.l"
+#line 85 "lex.l"
 {
     termeSuiv("PACK");
     return PACK;
@@ -908,7 +908,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 89 "Flamingo.l"
+#line 89 "lex.l"
 {
     termeSuiv("MAIN");
     return MAIN;
@@ -916,7 +916,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 93 "Flamingo.l"
+#line 93 "lex.l"
 {
     termeSuiv("HelloMain");
     return HelloMain;
@@ -924,7 +924,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 97 "Flamingo.l"
+#line 97 "lex.l"
 {
     termeSuiv("FONCTION");
     return FONCTION;
@@ -932,7 +932,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 101 "Flamingo.l"
+#line 101 "lex.l"
 {
     termeSuiv("CONST");
     return CONST;
@@ -940,7 +940,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 105 "Flamingo.l"
+#line 105 "lex.l"
 {
     termeSuiv("INTTYPE");
     return INTTYPE;
@@ -948,7 +948,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 109 "Flamingo.l"
+#line 109 "lex.l"
 {
     termeSuiv("BIGINTTYPE");
     return BIGINTTYPE;
@@ -956,7 +956,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 113 "Flamingo.l"
+#line 113 "lex.l"
 {
     termeSuiv("LONGINTTYPE");
     return LONGINTTYPE;
@@ -964,7 +964,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 117 "Flamingo.l"
+#line 117 "lex.l"
 {
     termeSuiv("STRINGTYPE");
     return STRINGTYPE;
@@ -972,7 +972,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 121 "Flamingo.l"
+#line 121 "lex.l"
 {
     termeSuiv("FLOATTYPE");
     return FLOATTYPE;
@@ -980,7 +980,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 125 "Flamingo.l"
+#line 125 "lex.l"
 {
     termeSuiv("BIGFLOATTYPE");
     return BIGFLOATTYPE;
@@ -988,7 +988,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 129 "Flamingo.l"
+#line 129 "lex.l"
 {
     termeSuiv("LONGFLOATTYPE");
     return LONGFLOATTYPE;
@@ -996,7 +996,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 133 "Flamingo.l"
+#line 133 "lex.l"
 {
     termeSuiv("BOOLTYPE");
     return BOOLTYPE;
@@ -1004,7 +1004,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 137 "Flamingo.l"
+#line 137 "lex.l"
 {
     termeSuiv("TYPE");
     return TYPE;
@@ -1012,7 +1012,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 141 "Flamingo.l"
+#line 141 "lex.l"
 {
     termeSuiv("STRUCT");
     return STRUCT;
@@ -1020,7 +1020,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 146 "Flamingo.l"
+#line 146 "lex.l"
 {
     termeSuiv("IF");
     return IF;
@@ -1028,7 +1028,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 150 "Flamingo.l"
+#line 150 "lex.l"
 {
     termeSuiv("ELSE");
     return ELSE;
@@ -1036,7 +1036,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 154 "Flamingo.l"
+#line 154 "lex.l"
 {
     termeSuiv("REPEAT");
     return REPEAT;
@@ -1044,7 +1044,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 158 "Flamingo.l"
+#line 158 "lex.l"
 {
     termeSuiv("WHILE");
     return WHILE;
@@ -1052,7 +1052,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 162 "Flamingo.l"
+#line 162 "lex.l"
 {
     termeSuiv("FOR");
     return FOR;
@@ -1060,7 +1060,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 166 "Flamingo.l"
+#line 166 "lex.l"
 {
     termeSuiv("FROM");
     return FROM;
@@ -1068,7 +1068,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 170 "Flamingo.l"
+#line 170 "lex.l"
 {
     termeSuiv("TO");
     return TO;
@@ -1076,7 +1076,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 174 "Flamingo.l"
+#line 174 "lex.l"
 {
     termeSuiv("GIVEBACK");
     return GIVEBACK;
@@ -1084,7 +1084,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 178 "Flamingo.l"
+#line 178 "lex.l"
 {
     termeSuiv("READ");
     return READ;
@@ -1092,7 +1092,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 182 "Flamingo.l"
+#line 182 "lex.l"
 {
     termeSuiv("WRITE");
     return WRITE;
@@ -1100,7 +1100,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 186 "Flamingo.l"
+#line 186 "lex.l"
 {
     termeSuiv("nb_float");
     return FLOAT;
@@ -1108,7 +1108,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 190 "Flamingo.l"
+#line 190 "lex.l"
 {
     termeSuiv("nb_int");
     return INT;
@@ -1116,7 +1116,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 194 "Flamingo.l"
+#line 194 "lex.l"
 {
     termeSuiv("bol");
     return BOOL;
@@ -1124,7 +1124,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 198 "Flamingo.l"
+#line 198 "lex.l"
 {
     termeSuiv("c_string");
     return STRING;
@@ -1132,7 +1132,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 203 "Flamingo.l"
+#line 203 "lex.l"
 {
     termeSuiv("(");
     return PARENTHESEOUVRANTE;
@@ -1140,7 +1140,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 207 "Flamingo.l"
+#line 207 "lex.l"
 {
     termeSuiv(")");
     return PARENTHESEFERMANTE;
@@ -1148,7 +1148,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 211 "Flamingo.l"
+#line 211 "lex.l"
 {
     termeSuiv("{");
     return ACCOLADEOUVRANTE;
@@ -1156,7 +1156,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 215 "Flamingo.l"
+#line 215 "lex.l"
 {
     termeSuiv("}");
     return ACCOLADEFERMANTE;
@@ -1164,7 +1164,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 219 "Flamingo.l"
+#line 219 "lex.l"
 {
     termeSuiv("[");
     return CROCHETOUVRANT;
@@ -1172,7 +1172,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 223 "Flamingo.l"
+#line 223 "lex.l"
 {
     termeSuiv("]");
     return CROCHETFERMANT;
@@ -1180,7 +1180,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 227 "Flamingo.l"
+#line 227 "lex.l"
 {
     termeSuiv(";;");
     return ENDINST ;
@@ -1188,7 +1188,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 231 "Flamingo.l"
+#line 231 "lex.l"
 {
     termeSuiv(".");
     return POINT;
@@ -1196,7 +1196,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 235 "Flamingo.l"
+#line 235 "lex.l"
 {
     termeSuiv(",");
     return VIRG;
@@ -1204,7 +1204,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 239 "Flamingo.l"
+#line 239 "lex.l"
 {
     termeSuiv("++");
     return INC;
@@ -1212,7 +1212,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 243 "Flamingo.l"
+#line 243 "lex.l"
 {
     termeSuiv("--");
     return DEC;
@@ -1220,7 +1220,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 247 "Flamingo.l"
+#line 247 "lex.l"
 {
     termeSuiv("=");
     return AFFECT;
@@ -1228,7 +1228,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 251 "Flamingo.l"
+#line 251 "lex.l"
 {
     termeSuiv("!=");
     return NOTEQUALS;
@@ -1236,7 +1236,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 255 "Flamingo.l"
+#line 255 "lex.l"
 {
     termeSuiv("+=");
     return ADDEQUALS;
@@ -1244,7 +1244,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 259 "Flamingo.l"
+#line 259 "lex.l"
 {
     termeSuiv("-=");
     return SUBEQUALS;
@@ -1252,7 +1252,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 263 "Flamingo.l"
+#line 263 "lex.l"
 {
     termeSuiv("*=");
     return MULEQUALS;
@@ -1260,7 +1260,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 267 "Flamingo.l"
+#line 267 "lex.l"
 {
     termeSuiv("//=");
     return DIVINTEQUALS;
@@ -1268,7 +1268,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 271 "Flamingo.l"
+#line 271 "lex.l"
 {
     termeSuiv("/=");
     return DIVEQUALS;
@@ -1276,7 +1276,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 275 "Flamingo.l"
+#line 275 "lex.l"
 {
     termeSuiv("%=");
     return MODEQUALS;
@@ -1284,7 +1284,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 279 "Flamingo.l"
+#line 279 "lex.l"
 {
     termeSuiv("^=");
     return POWEQUALS;
@@ -1292,7 +1292,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 283 "Flamingo.l"
+#line 283 "lex.l"
 {
     termeSuiv("+");
     return ADD;
@@ -1300,7 +1300,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 287 "Flamingo.l"
+#line 287 "lex.l"
 {
     termeSuiv("-");
     return SUB;
@@ -1308,7 +1308,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 291 "Flamingo.l"
+#line 291 "lex.l"
 {
     termeSuiv("*");
     return MUL;
@@ -1316,7 +1316,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 295 "Flamingo.l"
+#line 295 "lex.l"
 {
     termeSuiv("%");
     return MOD;
@@ -1324,7 +1324,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 299 "Flamingo.l"
+#line 299 "lex.l"
 {
     termeSuiv("//");
     return DIV;
@@ -1332,7 +1332,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 303 "Flamingo.l"
+#line 303 "lex.l"
 {
     termeSuiv("/");
     return INTDIV;
@@ -1340,7 +1340,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 307 "Flamingo.l"
+#line 307 "lex.l"
 {
     termeSuiv("^");
     return POW;
@@ -1348,7 +1348,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 311 "Flamingo.l"
+#line 311 "lex.l"
 {
     termeSuiv("!");
     return NEG;
@@ -1356,7 +1356,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 315 "Flamingo.l"
+#line 315 "lex.l"
 {
     termeSuiv("<");
     return LESS;
@@ -1364,7 +1364,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 319 "Flamingo.l"
+#line 319 "lex.l"
 {
     termeSuiv("<=");
     return LESSEQUALS;
@@ -1372,7 +1372,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 323 "Flamingo.l"
+#line 323 "lex.l"
 {
     termeSuiv(">");
     return GREATER;
@@ -1380,7 +1380,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 327 "Flamingo.l"
+#line 327 "lex.l"
 {
     termeSuiv(">=");
     return GREATEREQUALS;
@@ -1388,7 +1388,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 331 "Flamingo.l"
+#line 331 "lex.l"
 {
     termeSuiv("==");
     return DOUBLEEQUALS;
@@ -1396,7 +1396,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 335 "Flamingo.l"
+#line 335 "lex.l"
 {
     termeSuiv("&&");
     return AND;
@@ -1404,7 +1404,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 339 "Flamingo.l"
+#line 339 "lex.l"
 {
     termeSuiv("||");
     return OR;
@@ -1412,7 +1412,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 345 "Flamingo.l"
+#line 345 "lex.l"
 {
     termeSuiv("ID");
     return ID;
@@ -1421,14 +1421,14 @@ YY_RULE_SETUP
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 350 "Flamingo.l"
+#line 350 "lex.l"
 {
     termeCourant =1;
 }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 354 "Flamingo.l"
+#line 354 "lex.l"
 {
     termeCourant+=yyleng;
 }
@@ -1436,16 +1436,16 @@ YY_RULE_SETUP
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 358 "Flamingo.l"
+#line 358 "lex.l"
 {}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 360 "Flamingo.l"
+#line 360 "lex.l"
 yyterminate();
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 362 "Flamingo.l"
+#line 362 "lex.l"
 {
     yyerror("Unexpected token");
     showLexicalError();
@@ -1454,10 +1454,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 368 "Flamingo.l"
+#line 368 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1461 "lex.yy.c"
+#line 1460 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2472,8 +2472,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 368 "Flamingo.l"
-
+#line 368 "lex.l"
 
 
 

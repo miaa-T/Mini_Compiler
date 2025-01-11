@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-#include "Flamingo.tab.h"
+#include "yacc.tab.h"
 
 extern void termeSuiv(char *s);
 extern void yyerror(const char *s);
@@ -366,5 +366,4 @@ OR                   \|\|
     }
 
 %%
-
 

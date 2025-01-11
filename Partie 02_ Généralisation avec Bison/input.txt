@@ -1,21 +1,41 @@
 pack "simple_test";;
-fn int add(int a, int b) {
-    int c;; 
+fn int factorial(int n) {  
+    int result ;;
+    result = 1;;
+    int i;;
+    for (i from 1 to n) {
+        result = result * i;;
+    };;
+    giveback result}
+fn float power(float base, int exponent) { 
+    float result = 1.0;;
+    while (exponent > 0) repeat {
+        result = result * base;;
+        exponent = exponent - 1;;
+    };;
+    giveback result
+}
+fn int add(int a, int b) { 
+    int c;;
     c = a + b;;
     giveback c }
-    
-fn float power(float base, int exponent) {
-    float result = 1.0 ;;
-    while (exponent > 0) repeat { result = result * base;;
-        exponent = exponent - 1;; };;
-    giveback result }
-Main(Hello_Flamingo_Developer){
-    int x;;
-    x=5;;   
-    int y ;;
-    y = 10;;
-    int result ;;
-    result = add(x, y);;
-    write( result);;
+Main(Hello_Flamingo_Developer) {
+    int x = 5;;
+    int y = 3;;
+    float z = 2.5;;
+   int a ;;
+   a= factorial(x);;
+    write("Factorial of ", x, ": ",a );;
+    int b;;
+    b=power(z, y);;
+    write("Power of ", z, " raised to ", y, ": ", b);;
+    if (x > y) {
+        write("x is greater than y");;
+    } else {
+        write("y is greater than or equal to x");;
+    };;
+   while (x > 0) repeat {
+        x = x - 1;;
+        write("Countdown: ", x);;
+    } ;;
 }
-

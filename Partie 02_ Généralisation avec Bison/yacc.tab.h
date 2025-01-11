@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_FLAMINGO_TAB_H_INCLUDED
-# define YY_YY_FLAMINGO_TAB_H_INCLUDED
+#ifndef YY_YY_YACC_TAB_H_INCLUDED
+# define YY_YY_YACC_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -57,7 +57,7 @@ extern int yydebug;
     PACK = 258,                    /* PACK  */
     FONCTION = 259,                /* FONCTION  */
     MAIN = 260,                    /* MAIN  */
-    HelloMain = 261,               /* HelloMain  */
+    ExpressionHELLO = 261,         /* ExpressionHELLO  */
     CONST = 262,                   /* CONST  */
     TYPE = 263,                    /* TYPE  */
     INTTYPE = 264,                 /* INTTYPE  */
@@ -118,7 +118,8 @@ extern int yydebug;
     DOUBLEEQUALS = 319,            /* DOUBLEEQUALS  */
     AND = 320,                     /* AND  */
     OR = 321,                      /* OR  */
-    ID = 322                       /* ID  */
+    ID = 322,                      /* ID  */
+    HelloMain = 323                /* HelloMain  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -137,4 +138,4 @@ extern YYSTYPE yylval;
 int yyparse (void);
 
 
-#endif /* !YY_YY_FLAMINGO_TAB_H_INCLUDED  */
+#endif /* !YY_YY_YACC_TAB_H_INCLUDED  */
