@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
+#include <stdbool.h>
 #define YYDEBUG 1
 #include "SymboleTable.h"
 #include "quadruplets.h"
@@ -261,6 +263,33 @@ Affec://mahdia
         if (!areTypesCompatible(varType, assignedType)) {
             yyerror("Incompatibilité de type dans l'affectation à la variable");
         }
+    if (symbole->categorieNoeud == Attsimple) {
+            // Mettre à jour la valeur directement dans le NodeSymbole
+            switch (assignedType) {
+                case INT32:
+                    symbole->value.intValue = atoi($3);
+                    break;
+                case FLOAT32:
+                    symbole->value.floatValue = atof($3);
+                    break;
+                case STRING:
+                    free(symbole->value.stringValue); // Libérer l'ancienne valeur si elle existe
+                    symbole->value.stringValue = strdup($3);
+                    break;
+                case BOOL:
+                    symbole->value.boolValue = (strcmp($3, "TRUE") == 0);
+                    break;
+                default:
+                    symbole->value.nullValue = NULL;
+                    break;
+            }
+        } else {
+            yyerror("L'affectation n'est pas valide pour ce type de symbole");
+        }
+
+        // Générer un quadruplet d'affectation
+        insererQuadreplet(&q, "AFFECT", $3, "", $1, qc);
+        qc++;
     }
     |StructChamp AFFECT AffecType
     {
@@ -281,6 +310,29 @@ Affec://mahdia
         if (!areTypesCompatible(fieldType, assignedType)) {
             yyerror("Incompatibilité de type dans l'affectation au champ de structure");
         }
+    // Mettre à jour la valeur du champ dans la table des symboles
+        switch (assignedType) {
+            case INT32:
+                field->value.intValue = atoi($3);
+                break;
+            case FLOAT32:
+                field->value.floatValue = atof($3);
+                break;
+            case STRING:
+                free(field->value.stringValue); // Libérer l'ancienne valeur si elle existe
+                field->value.stringValue = strdup($3);
+                break;
+            case BOOL:
+                field->value.boolValue = (strcmp($3, "TRUE") == 0);
+                break;
+            default:
+                field->value.nullValue = NULL;
+                break;
+        }
+
+        // Générer un quadruplet d'affectation pour le champ de structure
+        insererQuadreplet(&q, "AFFECT", $3, "", $1, qc);
+        qc++;
     }
     |ID CROCHETOUVRANT ID CROCHETFERMANT AFFECT AffecType
     {
@@ -296,6 +348,9 @@ Affec://mahdia
         if (!areTypesCompatible(arrayElementType, assignedType)) {
             yyerror("Type mismatch in assignment to array element");
         }
+        insererQuadreplet(&q, "AFFECT", $6, "", $1, qc);
+        qc++;
+
     }
     ;
 
@@ -599,7 +654,7 @@ Type getTypeOfExpression(const char* expression) {
         return BOOL;
     }
 
-    // erifier les variables
+    //v erifier les variables
     if (isIdentifier(expression)) {
         NodeSymbole* symbol = search(symboleTable, expression);
         if (symbol != NULL) {
@@ -812,16 +867,99 @@ char* extractOperand2(const char* expression) {
 }
 
 
+// Vérifie si une chaîne est un littéral entier
+bool isIntegerLiteral(const char* str) {
+    if (str == NULL || *str == '\0') return false;
+    while (*str) {
+        if (!isdigit(*str)) return false;
+        str++;
+    }
+    return true;
+}
 
+// Vérifie si une chaîne est un littéral flottant
+bool isFloatLiteral(const char* str) {
+    if (str == NULL || *str == '\0') return false;
+    bool hasDecimal = false;
+    while (*str) {
+        if (*str == '.') {
+            if (hasDecimal) return false;
+            hasDecimal = true;
+        } else if (!isdigit(*str)) {
+            return false;
+        }
+        str++;
+    }
+    return hasDecimal;
+}
 
-// Fonctions auxiliaires (implémenter celles-ci en fonction de la syntaxe de votre langage)
-bool isIntegerLiteral(const char* str);
-bool isFloatLiteral(const char* str);
-bool isStringLiteral(const char* str);
-bool isBooleanLiteral(const char* str);
-bool isIdentifier(const char* str);
-bool containsOperator(const char* str, const char* op);
-char* extractOperand1(const char* expression);
-char* extractOperand2(const char* expression);
-bool isFunctionCall(const char* str);
-char* extractFunctionName(const char* str);
+// Vérifie si une chaîne est un littéral de chaîne de caractères
+bool isStringLiteral(const char* str) {
+    if (str == NULL || *str == '\0') return false;
+    return (*str == '"' && str[strlen(str) - 1] == '"');
+}
+
+// Vérifie si une chaîne est un littéral booléen
+bool isBooleanLiteral(const char* str) {
+    if (str == NULL) return false;
+    return (strcmp(str, "TRUE") == 0 || strcmp(str, "FALSE") == 0);
+}
+
+// Vérifie si une chaîne est un identifiant valide
+bool isIdentifier(const char* str) {
+    if (str == NULL || *str == '\0') return false;
+    if (!isalpha(*str) && *str != '_') return false;
+    str++;
+    while (*str) {
+        if (!isalnum(*str) && *str != '_') return false;
+        str++;
+    }
+    return true;
+}
+
+// Vérifie si une chaîne contient un opérateur spécifique
+bool containsOperator(const char* str, const char* op) {
+    if (str == NULL || op == NULL) return false;
+    return (strstr(str, op) != NULL);
+}
+
+// Extrait le premier opérande d'une expression
+char* extractOperand1(const char* expression) {
+    if (expression == NULL) return NULL;
+    char* operand = strdup(expression);
+    char* op = strpbrk(operand, "+-*/%^=<>!&|");
+    if (op != NULL) {
+        *op = '\0';
+    }
+    return operand;
+}
+
+// Extrait le deuxième opérande d'une expression
+char* extractOperand2(const char* expression) {
+    if (expression == NULL) return NULL;
+    char* op = strpbrk(expression, "+-*/%^=<>!&|");
+    if (op == NULL) return NULL;
+    op++;
+    while (*op == ' ') op++;
+    return strdup(op);
+}
+
+// Vérifie si une chaîne est un appel de fonction
+bool isFunctionCall(const char* str) {
+    if (str == NULL) return false;
+    char* openParen = strchr(str, '(');
+    char* closeParen = strchr(str, ')');
+    return (openParen != NULL && closeParen != NULL && closeParen > openParen);
+}
+
+// Extrait le nom de la fonction d'un appel de fonction
+char* extractFunctionName(const char* str) {
+    if (str == NULL) return NULL;
+    char* openParen = strchr(str, '('));
+    if (openParen == NULL) return NULL;
+    size_t len = openParen - str;
+    char* funcName = (char*)malloc(len + 1);
+    strncpy(funcName, str, len);
+    funcName[len] = '\0';
+    return funcName;
+}
