@@ -1,4 +1,8 @@
 #include "SymboleTable.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 const char* typeToStr(Type type) {
     switch (type) {
@@ -31,7 +35,24 @@ void afficherAttributs(NodeSymbole *symbole) {
     NodeAttribut *currentAttribut = symbole->first;
     printf("Affichage des attributs pour le symbole ID=%s\n", symbole->Id);
     while (currentAttribut != NULL) {
-        printf("Attribut: %s, Type: %s\n", currentAttribut->name, typeToStr(currentAttribut->type));
+        printf("Attribut: %s, Type: %s, Valeur: ", currentAttribut->name, typeToStr(currentAttribut->type));
+        switch (currentAttribut->type) {
+            case INT32:
+                printf("%d\n", currentAttribut->value.intValue);
+                break;
+            case FLOAT32:
+                printf("%f\n", currentAttribut->value.floatValue);
+                break;
+            case STRING:
+                printf("%s\n", currentAttribut->value.stringValue);
+                break;
+            case BOOL:
+                printf("%s\n", currentAttribut->value.boolValue ? "true" : "false");
+                break;
+            default:
+                printf("NULL\n");
+                break;
+        }
         currentAttribut = currentAttribut->next;
     }
     printf("\n");
@@ -62,13 +83,23 @@ NodeSymbole *insertSymbole(SymboleTable *symboleTable, char *tokenId, categorie 
     NodeSymbole *newNode = (NodeSymbole *)malloc(sizeof(NodeSymbole));
     newNode->Id = strdup(tokenId);
     newNode->nbAttribut = 0;
-    newNode->categorieNoeud = cat; // Par défaut
+    newNode->categorieNoeud = cat;
+    newNode->type = type;
     newNode->next = NULL;
     newNode->first = NULL;
     newNode->last = NULL;
     newNode->firstparam = NULL;
     newNode->lastparam = NULL;
-    newNode->type = type;
+
+    // Initialiser la valeur en fonction de la catégorie
+    if (cat == Attsimple) {
+        // Initialiser la valeur pour un attribut simple
+        newNode->value.intValue = 0; // Valeur par défaut (peut être adapté)
+    } else {
+        // Pour les fonctions et enregistrements, la valeur est NULL
+        newNode->value.nullValue = NULL;
+    }
+
     if (!symboleTable->first) {
         symboleTable->first = symboleTable->last = newNode;
     } else {
@@ -96,6 +127,7 @@ NodeSymbole *insertSymboleByIndex(SymboleTable *symboleTable, int index, char *t
     newNode->firstparam = NULL;
     newNode->lastparam = NULL;
     newNode->type = type;
+
     if (index == 0) {
         newNode->next = symboleTable->first;
         symboleTable->first = newNode;
@@ -129,11 +161,30 @@ NodeSymbole *getSymboleByIndex(SymboleTable *symboleTable, int index) {
 }
 
 /** Ajout d'un attribut à un symbole donné **/
-void setAttribut(NodeSymbole *symbole, char *name, Type type) {
+void setAttribut(NodeSymbole *symbole, char *name, Type type, void *value) {
     NodeAttribut *newAttr = (NodeAttribut *)malloc(sizeof(NodeAttribut));
     newAttr->name = strdup(name);
     newAttr->type = type;
     newAttr->next = NULL;
+
+    // Initialiser la valeur en fonction du type
+    switch (type) {
+        case INT32:
+            newAttr->value.intValue = *(int *)value;
+            break;
+        case FLOAT32:
+            newAttr->value.floatValue = *(float *)value;
+            break;
+        case STRING:
+            newAttr->value.stringValue = strdup((char *)value);
+            break;
+        case BOOL:
+            newAttr->value.boolValue = *(bool *)value;
+            break;
+        default:
+            newAttr->value.nullValue = NULL;
+            break;
+    }
 
     if (!symbole->first) {
         symbole->first = symbole->last = newAttr;
@@ -146,10 +197,10 @@ void setAttribut(NodeSymbole *symbole, char *name, Type type) {
 }
 
 /** Ajout d'un attribut à un symbole par index **/
-void setAttributByIndex(SymboleTable *symboleTable, int index, char *name, Type type) {
+void setAttributByIndex(SymboleTable *symboleTable, int index, char *name, Type type, void *value) {
     NodeSymbole *symbole = getSymboleByIndex(symboleTable, index);
     if (symbole) {
-        setAttribut(symbole, name, type);
+        setAttribut(symbole, name, type, value);
     }
 }
 
@@ -169,6 +220,56 @@ NodeAttribut *getAttribut(NodeSymbole *nodeSymbole, char *name) {
 NodeAttribut *getAttributByIndex(SymboleTable *symboleTable, int index, char *name) {
     NodeSymbole *symbole = getSymboleByIndex(symboleTable, index);
     return symbole ? getAttribut(symbole, name) : NULL;
+}
+
+void updateAttributValue(NodeSymbole *symbole, char *name, void *value) {
+    NodeAttribut *attr = getAttribut(symbole, name);
+    if (attr == NULL) {
+        printf("Attribut non trouvé\n");
+        return;
+    }
+
+    // Mettre à jour la valeur en fonction du type
+    switch (attr->type) {
+        case INT32:
+            attr->value.intValue = *(int *)value;
+            break;
+        case FLOAT32:
+            attr->value.floatValue = *(float *)value;
+            break;
+        case STRING:
+            free(attr->value.stringValue); // Libérer l'ancienne valeur
+            attr->value.stringValue = strdup((char *)value);
+            break;
+        case BOOL:
+            attr->value.boolValue = *(bool *)value;
+            break;
+        default:
+            attr->value.nullValue = NULL;
+            break;
+    }
+}
+
+void *getAttributValue(NodeSymbole *symbole, char *name) {
+    NodeAttribut *attr = getAttribut(symbole, name);
+    if (attr == NULL) {
+        printf("Attribut non trouvé\n");
+        return NULL;
+    }
+
+    // Retourner un pointeur vers la valeur en fonction du type
+    switch (attr->type) {
+        case INT32:
+            return &attr->value.intValue;
+        case FLOAT32:
+            return &attr->value.floatValue;
+        case STRING:
+            return attr->value.stringValue;
+        case BOOL:
+            return &attr->value.boolValue;
+        default:
+            return NULL;
+    }
 }
 
 /** Suppression des attributs d'un noeud NodeAttribut d'un symbole **/
@@ -338,31 +439,29 @@ Type getTypeOfParamByIndex(NodeSymbole *symbole, int index) {
     }
     return current->type;
 }
+
 int main() {
-    printf("=== Test de SymboleTable ===\n");
-
     SymboleTable *table = allocateSymboleTable();
-    printf("\n\n\n\n\n");
 
-    // Test 1: Insertion d'un nouveau symbole de type variable simple
-    NodeSymbole *sym1 = insertSymbole(table, "fonction1", Fonction, INT32);
-    setAttribut(sym1, "var1", INT32);
-    setAttribut(sym1, "var2",INT32);
-    addParam(sym1, "att1", INT32 );
+    // Ajouter un symbole simple
+    NodeSymbole *var = insertSymbole(table, "x", Attsimple, INT32);
+    int value = 42;
+    setAttribut(var, "x", INT32, &value);
+
+    // Ajouter une fonction avec des paramètres
+    NodeSymbole *func = insertSymbole(table, "func", Fonction, INT32);
+    addParam(func, "param1", INT32);
+
+    // Afficher la table des symboles
     afficherTableSymbole(table);
-NodeAttribut *searchedAttr = searchAttributByName(sym1, "var1");
-    if (searchedAttr) {
-        printf("Attribut trouvé: %s, Type: %s\n", searchedAttr->name, typeToStr(searchedAttr->type));
-    } else {
-        printf("Attribut non trouvé.\n");
-    }
-    Param *searchedparam= searchParamByName(sym1, "att1");
- if (searchedparam) {
-        printf("Attribut trouvé: %s, Type: %s\n", searchedparam->name, typeToStr(searchedparam->type));
-    } else {
-        printf("Attribut non trouvé.\n");
-    }
 
+    // Mettre à jour et récupérer une valeur
+    int newValue = 100;
+    updateAttributValue(var, "x", &newValue);
+    int *retrievedValue = (int *)getAttributValue(var, "x");
+    printf("Valeur récupérée: %d\n", *retrievedValue);
+
+    DeleteTable(&table);
     return 0;
 }
 
@@ -375,6 +474,7 @@ int countParams(NodeSymbole *symbole) {
     }
     return count;
 }
+
 Type getTypeByID(SymboleTable *symboleTable, char *tokenId) {
     NodeSymbole *symbole = search(symboleTable, tokenId);
     if (symbole) {

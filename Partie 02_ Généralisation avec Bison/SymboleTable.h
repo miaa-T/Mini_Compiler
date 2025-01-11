@@ -1,15 +1,13 @@
-#ifndef SymboleTable_H
-#define SymboleTable_H
+#ifndef SYMBOLETABLE_H
+#define SYMBOLETABLE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /* Structure */
 /*************************************************************************************/
-typedef struct ChampsEnreg { // ceci est une table contenant les pointeurs vers les différents champs d'un enregistrement
-    struct ChampsEnreg *next;
-    char *Pointeur;
-} ChampsEnreg;
 
 typedef enum {
     INT32,
@@ -22,6 +20,7 @@ typedef enum {
     FLOAT256,
     CONST,
     TABLE,
+    BOOL,
     TABLE2D,
     NULLL,
 } Type;
@@ -29,6 +28,13 @@ typedef enum {
 typedef struct NodeAttribut {
     char *name;
     Type type; // Type de l'attribut
+    union {
+        int intValue;
+        float floatValue;
+        char* stringValue;
+        bool boolValue; 
+        void* nullValue;
+    } value;
     struct NodeAttribut *next;
 } NodeAttribut;
 
@@ -49,6 +55,13 @@ typedef struct NodeSymbole {
     int nbAttribut;
     categorie categorieNoeud;
     Type type;
+    union {
+        int intValue;
+        float floatValue;
+        char* stringValue;
+        bool boolValue; 
+        void* nullValue;
+    } value;
     struct NodeSymbole *next;
     NodeAttribut *first;
     NodeAttribut *last;
@@ -72,9 +85,9 @@ NodeSymbole *insertSymboleByIndex(SymboleTable *symboleTable, int index, char *t
 // /** Avoir un symbole en donnant son index **/
 NodeSymbole *getSymboleByIndex(SymboleTable *symboleTable, int index);
 // /** Ajout d'un attribut à la liste d'un symbole donné **/
-void setAttribut(NodeSymbole *symbole, char *name, Type type);
+void setAttribut(NodeSymbole *symbole, char *name, Type type, void *value);
 // /** Ajout d'un attribut à la liste d'un symbole en donnant l'indice de ce dernier **/
-void setAttributByIndex(SymboleTable *symboleTable, int index, char *name, Type type);
+void setAttributByIndex(SymboleTable *symboleTable, int index, char *name, Type type, void *value);
 // /** Avoir un attribut d'un symbole en donnant son nom **/
 NodeAttribut *getAttribut(NodeSymbole *nodeSymbole, char *name);
 // /** Avoir un attribut d'un symbole en donnant l'index du symbole et le nom d'attribut **/
@@ -97,4 +110,5 @@ void afficherTableSymbole(SymboleTable *table);
 const char* typeToStr(Type type);
 NodeAttribut *searchAttributByName(NodeSymbole *symbole, char *name);
 /*****************************************************************************************/
+
 #endif

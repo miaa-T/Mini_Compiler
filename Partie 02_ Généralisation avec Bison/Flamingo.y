@@ -509,12 +509,44 @@ current_call=search(symboleTable,$1);
 
 
 //imene
-CorIf: IF Condition  ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE Alternate;
+CorIf: IF Condition {
+    insererQuadreplet(&q, "BZ", "tmp", "", "", qc);
+    empiler(stack, qc);  // Empile addrBZ
+    qc++;
+} ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE {
+    insererQuadreplet(&q, "BR", "", "", "", qc);
+    empiler(stack, qc);  // Empile addrBR
+    qc++;
 
-Alternate: %empty
-    |ELSE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE
-    |ELSE CorIf
-    ;
+    // Correction :
+    int addrBR = depiler(stack);    // On récupère d'abord BR
+    int addrBZ = depiler(stack);    // Puis BZ
+
+    char adresse[10];
+    sprintf(adresse, "%d", qc);
+    updateQuadreplet(q, addrBZ, adresse);
+
+    empiler(stack, addrBR);  // On remet addrBR pour Alternate
+} Alternate
+;
+
+Alternate:
+    %empty {
+        // Cas sans ELSE : on récupère et met à jour le BR pour qu'il pointe ici
+        char adresse[10];
+        sprintf(adresse, "%d", qc);
+        int addrBR = depiler(stack);
+        updateQuadreplet(q, addrBR, adresse);
+    }
+    | ELSE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE {
+        // Cas avec ELSE : on récupère et met à jour le BR pour qu'il pointe ici
+        char adresse[10];
+        sprintf(adresse, "%d", qc);
+        int addrBR = depiler(stack);
+        updateQuadreplet(q, addrBR, adresse);
+    }
+    | ELSE CorIf  // Cas du IF imbriqué - géré récursivement
+;
 
 comparaison:
             expression DOUBLEEQUALS expression
