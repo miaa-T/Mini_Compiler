@@ -166,7 +166,8 @@ FuncsDeclar:
      | FuncDeclar
     ;
     
-FuncDeclar:FONCTION typeVAR ID PARENTHESEOUVRANTE Parametres PARENTHESEFERMANTE ACCOLADEOUVRANTE CorFunc GIVEBACK ID ACCOLADEFERMANTE /* pour les fonctions*/
+FuncDeclar:FONCTION typeVAR ID PARENTHESEOUVRANTE Parametres PARENTHESEFERMANTE 
+ACCOLADEOUVRANTE CorFunc GIVEBACK ID ACCOLADEFERMANTE /* pour les fonctions*/
 {
 
   NodeSymbole *symbole = search(symboleTable, $3);
