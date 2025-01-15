@@ -1,0 +1,39 @@
+Main(Hello_Flamingo_Developer){
+    int x;;
+    x=5;;  
+    int y;;
+    y=6;;  
+    
+    if (x > y) {
+        write("x is greater than y");;
+        int a;;
+        int b;;
+        a=2;;
+        b=1;;
+        if (a > b) {
+        write("x is greater than y");;
+    } else {
+        write("else1");;
+        int cpt;;
+        cpt=100;;
+    };;
+    } else {
+        int o;;
+        o=0;;
+        write("else2");;
+    };;
+    int exponent;;
+    exponent=2;;
+    int base;;
+    base=3;;
+    int result;;
+
+     while (exponent > 0) repeat {
+         result = 3;;
+        exponent = 1;;
+        result= 4;; }
+        ;;
+        int rakm;;
+        rakm=5;;
+}
+

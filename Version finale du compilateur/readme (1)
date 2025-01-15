@@ -1,0 +1,60 @@
+PS C:\Users\win\Desktop\code\test> flex Flamingo.l
+PS C:\Users\win\Desktop\code\test> bison -d Flamingo.y
+Flamingo.y: warning: 8 shift/reduce conflicts [-Wconflicts-sr]
+Flamingo.y: warning: 3 reduce/reduce conflicts [-Wconflicts-rr]
+Flamingo.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+Flamingo.y:262.7-67: warning: rule useless in parser due to conflicts [-Wother]
+  262 |     | ID CROCHETOUVRANT ID CROCHETFERMANT VIRG ParamsWithoutVARTYPE 
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+PS C:\Users\win\Desktop\code\test> gcc lex.yy.c Flamingo.tab.c SymboleTable.c quadruplets.c pile.c -o output
+PS C:\Users\win\Desktop\code\test> .\output.exe
+
+
+
+
+Parsing Importationlib: 0.000000e+000mpty
+Parsing FuncDeclar: 0.000000e+000mpty
+Parsing FuncsDeclar: FuncDeclar
+Parsing typeVAR: INTTYPE
+
+
+Parsing Declar: typeVAR ID
+Parsing Inst: Declar
+Parsing Affec: ID AFFECT TYPE
+Parsing Inst: Affec
+
+
+Parsing typeVAR: INTTYPE
+Parsing Declar: typeVAR ID
+Parsing Inst: Declar
+Parsing Affec: ID AFFECT TYPE
+Parsing Inst: Affec
+
+
+
+Parsing terme: ID
+Parsing expression: terme
+Parsing terme: ID
+Parsing expression: terme
+Parsing comparaison: expression GREATER expression
+Parsing Condition: PARENTHESEOUVRANTE comparaison PARENTHESEFERMANTE
+Parsing ParamsWrite: STRING
+Parsing WriteMethod: WRITE PARENTHESEOUVRANTE ParamsWrite PARENTHESEFERMANTE
+Parsing Inst: WriteMethod
+Parsing aumoinsInst: Inst ENDINST
+Parsing CorFunc: aumoinsInst
+Parsing ParamsWrite: STRING
+Parsing WriteMethod: WRITE PARENTHESEOUVRANTE ParamsWrite PARENTHESEFERMANTE
+Parsing Inst: WriteMethod
+Parsing aumoinsInst: Inst ENDINST
+Parsing CorFunc: aumoinsInst
+Parsing Alternate: ELSE ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE
+Parsing CorIf: IF Condition ACCOLADEOUVRANTE CorFunc ACCOLADEFERMANTE Alternate
+Parsing Inst: CorIf
+Parsing aumoinsInst: Inst ENDINST
+Parsing aumoinsInst: Inst ENDINST aumoinsInst
+Parsing aumoinsInst: Inst ENDINST aumoinsInst
+Parsing aumoinsInst: Inst ENDINST aumoinsInst
+Parsing aumoinsInst: Inst ENDINST aumoinsInst
+Parsing CorMain: MAIN PARENTHESEOUVRANTE HelloMain PARENTHESEFERMANTE ACCOLADEOUVRANTE aumoinsInst ACCOLADEFERMANTE
+Parsing ProgrammeFlamingo
